@@ -1,24 +1,35 @@
 const fastify = require("fastify")({ logger: false }); // calling the fastify constructor
 
+const { model } = require("mongoose");
 const app = require("./app");
-
-const PORT = 3000;
-
-// fastify.get("/ping", async (req, res) => {
-//   // controller function
-//   res.send({ ping: "pong" });
-// });
+const connectToDB = require("./config/dbConfig");
+const { PORT } = require("./config/serverConfig");
 
 fastify.register(app);
+
+fastify.get("/", (req, res) => {
+  return res.send({ message: "OK" });
+});
+
+fastify.get("/home", function (req, res) {
+  return { message: "HOME" };
+});
+
+
+
 
 const start = async () => {
   try {
     await fastify.listen({
       port: PORT,
       host: "0.0.0.0",
-      bindHost: false,
     });
     console.log(`Server is listening on http://localhost:${PORT}`);
+    console.log(
+      `Bull UI -> is listening on http://localhost:${PORT}/admin/dashboard`
+    );
+    await connectToDB();
+    console.log("🚀 Successfully connect to DB");
   } catch (err) {
     fastify.log.error(err);
     process.exit(1);
