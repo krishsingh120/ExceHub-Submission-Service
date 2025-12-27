@@ -4,6 +4,7 @@ const { model } = require("mongoose");
 const app = require("./app");
 const connectToDB = require("./config/dbConfig");
 const { PORT } = require("./config/serverConfig");
+const serverAdapter = require("./config/bullBoardConfig");
 
 fastify.register(app);
 
@@ -15,9 +16,6 @@ fastify.get("/home", function (req, res) {
   return { message: "HOME" };
 });
 
-
-
-
 const start = async () => {
   try {
     await fastify.listen({
@@ -26,7 +24,7 @@ const start = async () => {
     });
     console.log(`Server is listening on http://localhost:${PORT}`);
     console.log(
-      `Bull UI -> is listening on http://localhost:${PORT}/admin/dashboard`
+      `Bull UI -> is listening on http://localhost:${PORT}/admin/queues`
     );
     await connectToDB();
     console.log("🚀 Successfully connect to DB");
