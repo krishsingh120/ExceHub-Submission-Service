@@ -14,8 +14,8 @@ async function app(fastify, options) {
   // register test routes\
   await fastify.register(require("./routes/api/apiRoutes"), { prefix: "/api" });
 
-  // Todo routes
-  await fastify.register(require("./routes/api/v1/SubmissionRoutes"), { prefix: "/api" });
+  // Submission routes
+  // await fastify.register(require("./routes/api/v1/SubmissionRoutes"), { prefix: "/api" });
 
   
 }

@@ -10,19 +10,21 @@ class SubmissionService {
     return "pong";
   }
 
-  async addSubmission(submission) {
-    const submissionResponse = await this.submissionRepository.createSubmission(
-      submission
+  async addSubmission(submissionPayload) {
+    console.log("Submission repo hit");
+
+    const submission = await this.submissionRepository.createSubmission(
+      submissionPayload
     );
 
-    if (!submissionResponse) {
+    if (!submission) {
       // TODO: Add error handling
       throw new { message: "Not able to create submission" }();
     }
-    console.log(submissionResponse);
+    // console.log("this is submission response: ",submission);
 
-    const response = await SubmissionProducers(submission);
-    return { queueResponse: response, submissionResponse };
+    const response = await SubmissionProducers(submissionPayload);
+    return { queueResponse: response, submission };
   }
 }
 

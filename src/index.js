@@ -1,10 +1,8 @@
 const fastify = require("fastify")({ logger: false }); // calling the fastify constructor
 
-const { model } = require("mongoose");
 const app = require("./app");
 const connectToDB = require("./config/dbConfig");
 const { PORT } = require("./config/serverConfig");
-const serverAdapter = require("./config/bullBoardConfig");
 
 fastify.register(app);
 

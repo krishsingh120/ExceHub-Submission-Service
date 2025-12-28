@@ -23,11 +23,13 @@ const pingRequest = async (req, res) => {
   return res.status(200).send({ data: response });
 };
 
-
 // TODO: Add validation layer
 async function createSubmission(req, res) {
-  const submission = await this.SubmissionService.addSubmission(req.body);
-  return res.status(200).json({
+  // console.log("Submission controller hit");
+
+  const submission = await this.submissionService.addSubmission(req.body);
+
+  return res.status(200).send({
     success: true,
     message: "Created submission successfully",
     error: {},
