@@ -13,6 +13,11 @@ class SubmissionService {
   async addSubmission(submissionPayload) {
     console.log("Submission repo hit");
 
+    // Hit the Problem Admin service and fetch the problem details.
+
+
+    // we are going to create the entry in db.
+
     const submission = await this.submissionRepository.createSubmission(
       submissionPayload
     );
