@@ -2,17 +2,18 @@ const axiosInstance = require("../config/axiosInstance");
 
 async function fetchProblemDetails(problemId) {
   try {
-    const uri = "/api/v1/problem";
+    const URI = "/api/v1/problem";
+    const response = await axiosInstance.get(URI + `/${problemId}`);
+    //     console.log("Api response", response);
 
-    console.log(uri + `/${problemId}`);
-
-    const response = await axiosInstance.get(uri + `/${problemId}`);
-    console.log("Api response", response);
-
-    return response;
+    return response.data;
   } catch (error) {
-    console.log("Something went wrong while fetching problem details");
-    console.log(error);
+    console.error(
+      "Error fetching problem details:",
+      error.response?.data || error.message
+    );
+
+    throw error;
   }
 }
 
