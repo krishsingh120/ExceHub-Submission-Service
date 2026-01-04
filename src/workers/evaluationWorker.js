@@ -1,24 +1,44 @@
 const { Worker } = require("bullmq");
-const redisConnection = require("../config/redisConfig");
 const axios = require("axios");
+
+const redisConnection = require("../config/redisConfig");
+const SubmissionRepository = require("../repositories/submissionRepository");
+const SubmissionService = require("../services/submissionService");
+
+const submissionService = new SubmissionService(new SubmissionRepository());
 
 function evaluationWorker(queueName) {
   new Worker(
     queueName,
     async (job) => {
       if (job.name === "EvaluationJob") {
-        console.log("evaluation job is : ", job.data);
+        // console.log("Evaluation job is : ", job.data);
 
         try {
-          const response = await axios.post(
+          // TODO(Step 11): also update the DB PENDING to SUCCESS -> Done
+          const payload = job.data;
+
+          const { response, userId, submissionId } = payload;
+
+          if (response.status.toLowerCase() === "SUCCESS".toLowerCase()) {
+            // console.log("success working");
+
+            const updateDB = await submissionService.updateSubmission(payload);
+            // console.log("Update DB Successfully", updateDB);
+
+            return updateDB;
+          }
+
+          // This is 12-step is complete/final flow
+          const socketResponse = await axios.post(
             "http://localhost:4000/sendPayload",
             {
-              userId: job.data.userId,
-              payload: job.data,
+              userId: userId,
+              payload: payload,
             }
           );
-          console.log(response);
-          console.log(job.data);
+          // console.log(socketResponse);
+          // console.log(job.data);
         } catch (error) {
           console.log(error);
         }

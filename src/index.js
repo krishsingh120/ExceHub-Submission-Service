@@ -28,6 +28,7 @@ const start = async () => {
     await connectToDB();
     console.log("🚀 Successfully connect to DB");
 
+    // call evaluation worker
     evaluationWorker("EvaluationQueue");
   } catch (err) {
     fastify.log.error(err);

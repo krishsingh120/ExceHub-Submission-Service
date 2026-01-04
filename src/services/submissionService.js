@@ -12,7 +12,7 @@ class SubmissionService {
   }
 
   async addSubmission(submissionPayload) {
-    console.log("Submission repo hit");
+    console.log("Submission service hit");
 
     // Hit the Problem Admin service and fetch the problem details.
     const problemId = submissionPayload.problemId;
@@ -54,13 +54,14 @@ class SubmissionService {
     }
     // console.log("this is submission response: ",submission);
 
+    // Added payload in submission queue
     const response = await SubmissionProducers({
       [submission._id]: {
         code: submission.code,
         language: submission.language,
         inputCase: problemAdminApiResponse.data.testCases[0].input,
         outputCase: problemAdminApiResponse.data.testCases[0].output,
-        userId,
+        userId: userId,
         submissionId: submission._id,
       },
     });
@@ -68,6 +69,19 @@ class SubmissionService {
     // TODO: Add handling of all testcases here.
 
     return { queueResponse: response, submission };
+  }
+
+  // TODO: Update submission - Done
+  async updateSubmission(payload) {
+    try {
+      const response = await this.submissionRepository.updateSubmission(
+        payload
+      );
+      return response;
+    } catch (error) {
+      console.log("Something went wrong in submission service");
+      console.log(error);
+    }
   }
 }
 
